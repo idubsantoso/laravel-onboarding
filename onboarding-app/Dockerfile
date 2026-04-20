@@ -1,7 +1,7 @@
 # =========================================================
 # Stage 1: Composer — install PHP dependencies
 # =========================================================
-FROM composer:2.7 AS vendor
+FROM composer:2.7-php8.1 AS vendor
 
 WORKDIR /app
 
