@@ -32,7 +32,7 @@ WORKDIR /app
 COPY package.json webpack.mix.js ./
 COPY resources/ resources/
 
-RUN npm install && npm run build
+RUN npm install && npm run prod
 
 # =========================================================
 # Stage 3: Production image
