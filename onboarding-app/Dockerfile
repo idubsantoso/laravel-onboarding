@@ -30,7 +30,9 @@ WORKDIR /app
 COPY package.json webpack.mix.js ./
 COPY resources/ resources/
 
-RUN npm install --legacy-peer-deps && npm run prod
+RUN npm install --legacy-peer-deps \
+    && npm install --save-dev webpackbar@3.2.0 --legacy-peer-deps \
+    && npm run prod
 
 # =========================================================
 # Stage 3: Production image
