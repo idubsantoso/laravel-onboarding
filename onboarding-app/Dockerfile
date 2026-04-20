@@ -29,12 +29,10 @@ FROM node:18-alpine AS assets
 
 WORKDIR /app
 
-RUN npm install -g yarn
-
 COPY package.json webpack.mix.js ./
 COPY resources/ resources/
 
-RUN yarn install && yarn prod
+RUN npm install --legacy-peer-deps && npm run prod
 
 # =========================================================
 # Stage 3: Production image
