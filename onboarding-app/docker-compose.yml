@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: onboarding-app
+    container_name: onboarding_app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - onboarding_net
+
+  db:
+    image: mysql:8.0
+    container_name: onboarding_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - onboarding_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: onboarding_redis
+    restart: unless-stopped
+    networks:
+      - onboarding_net
+
+volumes:
+  db_data:
+
+networks:
+  onboarding_net:
+    driver: bridge
