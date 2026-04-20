@@ -1,9 +1,16 @@
 # =========================================================
 # Stage 1: Composer — install PHP dependencies
 # =========================================================
-FROM composer:2.7-php8.1 AS vendor
+FROM php:8.1-cli-alpine AS vendor
 
 WORKDIR /app
+
+# Install dependencies for composer
+RUN apk add --no-cache git unzip curl
+
+# Install composer manually
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --install-dir=/usr/local/bin --filename=composer
 
 COPY composer.json composer.lock ./
 
